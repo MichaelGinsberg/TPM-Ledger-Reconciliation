@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from collections import defaultdict
 from io import BytesIO
 
 UNNAMED_DROP = [
@@ -70,22 +71,24 @@ def clean_inv(df):
 
 
 def build_lookup(df_inv):
-    return (
-        df_inv
-        .dropna(subset=['Order #'])
-        .drop_duplicates(subset=['Date', 'Credit'])
-        .set_index(['Date', 'Credit'])['Order #']
-        .to_dict()
-    )
+    lookup = defaultdict(list)
+    for _, row in df_inv.dropna(subset=['Order #']).iterrows():
+        lookup[(row['Date'], row['Credit'])].append(row['Order #'])
+    return lookup
 
 
 def match_orders(df, debit_col, inv_lookup):
-    df['Order #'] = [
-        inv_lookup.get((date, credit), inv_lookup.get((date, debit), orig))
-        for date, credit, debit, orig in zip(
-            df['Date'], df['Credit'], df[debit_col], df['Order #']
-        )
-    ]
+    new_order_nums = []
+    for date, credit, debit, orig in zip(
+        df['Date'], df['Credit'], df[debit_col], df['Order #']
+    ):
+        if inv_lookup[(date, credit)]:
+            new_order_nums.append(inv_lookup[(date, credit)].pop(0))
+        elif inv_lookup[(date, debit)]:
+            new_order_nums.append(inv_lookup[(date, debit)].pop(0))
+        else:
+            new_order_nums.append(orig)
+    df['Order #'] = new_order_nums
     return df
 
 
@@ -169,7 +172,7 @@ with tab_silver:
         silver_ledger_file = st.file_uploader("Ledger", type=["xlsx", "csv"],
                                               key="silver_ledger")
     with col2:
-        silver_credit_file = st.file_uploader("INV MRCP", type=["xlsx", "csv"],
+        silver_credit_file = st.file_uploader("Data View", type=["xlsx", "csv"],
                                               key="silver_credit")
 
     if silver_ledger_file and silver_credit_file:
@@ -201,7 +204,7 @@ with tab_gold:
         gold_ledger_file = st.file_uploader("Ledger", type=["xlsx", "csv"],
                                             key="gold_ledger")
     with col4:
-        gold_credit_file = st.file_uploader("INV MRCP", type=["xlsx", "csv"],
+        gold_credit_file = st.file_uploader("Data View", type=["xlsx", "csv"],
                                             key="gold_credit")
 
     if gold_ledger_file and gold_credit_file:
