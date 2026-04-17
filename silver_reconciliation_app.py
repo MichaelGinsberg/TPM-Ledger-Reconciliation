@@ -169,7 +169,7 @@ with tab_silver:
         silver_ledger_file = st.file_uploader("Ledger", type=["xlsx", "csv"],
                                               key="silver_ledger")
     with col2:
-        silver_credit_file = st.file_uploader("Credit", type=["xlsx", "csv"],
+        silver_credit_file = st.file_uploader("INV MRCP", type=["xlsx", "csv"],
                                               key="silver_credit")
 
     if silver_ledger_file and silver_credit_file:
@@ -201,7 +201,7 @@ with tab_gold:
         gold_ledger_file = st.file_uploader("Ledger", type=["xlsx", "csv"],
                                             key="gold_ledger")
     with col4:
-        gold_credit_file = st.file_uploader("Credit", type=["xlsx", "csv"],
+        gold_credit_file = st.file_uploader("INV MRCP", type=["xlsx", "csv"],
                                             key="gold_credit")
 
     if gold_ledger_file and gold_credit_file:
