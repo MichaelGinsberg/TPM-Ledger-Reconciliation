@@ -197,6 +197,7 @@ st.markdown("""
         color: #ffffff !important;
         box-shadow: 0 0 20px rgba(204,68,0,0.45) !important;
     }
+    .stTabs [data-baseweb="tab-highlight"] { display: none !important; }
     .stTabs [data-baseweb="tab-panel"] {
         background: #111111 !important;
         border: 1px solid #CC4400 !important;
