@@ -119,48 +119,204 @@ def to_excel_bytes(df):
 
 st.markdown("""
 <style>
-    /* Orange accent on tab active state */
-    .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        color: #CC4400 !important;
-        border-bottom-color: #CC4400 !important;
+    /* ── Base ───────────────────────────────────────────────────── */
+    .stApp, body, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
+        background-color: #0A0A0A !important;
+        color: #D8D8D8 !important;
     }
-    /* Orange accent on buttons */
-    .stDownloadButton > button, .stButton > button {
-        background-color: #CC4400 !important;
-        color: white !important;
+    p, li { color: #D8D8D8; }
+    .stMarkdown p { color: #D8D8D8 !important; }
+
+    /* ── Top chrome ─────────────────────────────────────────────── */
+    [data-testid="stHeader"] {
+        background: #0A0A0A !important;
+        border-bottom: 2px solid #CC4400;
+        box-shadow: 0 2px 12px rgba(204,68,0,0.2);
+    }
+    [data-testid="stToolbar"] button svg { fill: #CC4400 !important; }
+    [data-testid="stDecoration"] { display: none; }
+
+    /* ── Hero strip ─────────────────────────────────────────────── */
+    .hero-wrap {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 20px 24px;
+        background: linear-gradient(135deg, #1a0a00 0%, #111111 60%);
+        border: 1px solid #CC4400;
+        border-left: 6px solid #CC4400;
+        border-radius: 10px;
+        margin-bottom: 28px;
+        box-shadow: 0 0 24px rgba(204,68,0,0.15);
+    }
+    .hero-wrap img { border-radius: 6px; flex-shrink: 0; }
+    .hero-title {
+        margin: 0;
+        font-size: 1.55rem;
+        font-weight: 700;
+        color: #F2F2F2;
+        letter-spacing: -0.3px;
+        line-height: 1.2;
+    }
+    .hero-tag {
+        margin: 4px 0 0 0;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #CC4400;
+    }
+
+    /* ── Pill tabs ──────────────────────────────────────────────── */
+    .stTabs [data-baseweb="tab-list"] {
+        background: transparent !important;
+        border-bottom: none !important;
+        gap: 8px;
+        padding: 0;
+        margin-bottom: 12px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        background: #111111 !important;
+        border: 1px solid #CC4400 !important;
+        border-radius: 30px !important;
+        color: #CC4400 !important;
+        font-weight: 700 !important;
+        font-size: 0.8rem !important;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        padding: 8px 30px !important;
+        transition: all 0.18s ease !important;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        background: rgba(204,68,0,0.12) !important;
+        box-shadow: 0 0 10px rgba(204,68,0,0.2) !important;
+    }
+    .stTabs [data-baseweb="tab"][aria-selected="true"] {
+        background: #CC4400 !important;
+        border-color: #CC4400 !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 20px rgba(204,68,0,0.45) !important;
+    }
+    .stTabs [data-baseweb="tab-panel"] {
+        background: #111111 !important;
+        border: 1px solid #CC4400 !important;
+        border-radius: 12px !important;
+        padding: 28px 28px 24px !important;
+        box-shadow: 0 4px 24px rgba(204,68,0,0.1) !important;
+    }
+
+    /* ── Section labels ─────────────────────────────────────────── */
+    h2, h3 {
+        color: #CC4400 !important;
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1.4px !important;
+        border: none !important;
+        border-left: 3px solid #CC4400 !important;
+        padding: 2px 0 2px 10px !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* ── Upload cards ───────────────────────────────────────────── */
+    [data-testid="stFileUploader"] {
+        background: #0D0D0D;
+        border: 1px solid #CC4400;
+        border-radius: 10px;
+        padding: 10px 14px;
+        transition: all 0.2s ease;
+        box-shadow: 0 0 8px rgba(204,68,0,0.08);
+    }
+    [data-testid="stFileUploader"]:hover {
+        border-color: #CC4400;
+        box-shadow: 0 0 0 1px #CC4400, 0 0 20px rgba(204,68,0,0.2);
+    }
+    [data-testid="stFileUploader"] label {
+        font-weight: 700 !important;
+        color: #CC4400 !important;
+        font-size: 0.72rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+    }
+    [data-testid="stFileUploaderDropzone"] {
+        background: transparent !important;
         border: none !important;
     }
+    [data-testid="stFileUploaderDropzone"] span { color: #555 !important; }
+
+    /* ── Download / action buttons ──────────────────────────────── */
+    .stDownloadButton > button, .stButton > button {
+        background: #CC4400 !important;
+        color: white !important;
+        border: 1.5px solid #CC4400 !important;
+        border-radius: 6px !important;
+        font-weight: 700 !important;
+        font-size: 0.8rem !important;
+        letter-spacing: 0.8px !important;
+        text-transform: uppercase !important;
+        padding: 8px 24px !important;
+        transition: all 0.18s ease !important;
+        box-shadow: 0 0 12px rgba(204,68,0,0.3) !important;
+    }
     .stDownloadButton > button:hover, .stButton > button:hover {
-        background-color: #AA3300 !important;
+        background: #AA3300 !important;
+        box-shadow: 0 0 20px rgba(204,68,0,0.5) !important;
     }
-    /* Orange subheader underline accent */
-    h2, h3 {
-        border-bottom: 2px solid #CC4400;
-        padding-bottom: 4px;
+
+    /* ── Alerts ─────────────────────────────────────────────────── */
+    [data-testid="stAlert"] {
+        background: #0F0F0F !important;
+        border: 1px solid #CC4400 !important;
+        border-left: 4px solid #CC4400 !important;
+        border-radius: 8px !important;
+        color: #AAAAAA !important;
     }
-    /* Logo positioning */
-    [data-testid="stHeader"] {
-        background-color: transparent;
+    .stAlert { background: #0F0F0F !important; color: #AAAAAA !important; }
+
+    /* ── Dataframe ──────────────────────────────────────────────── */
+    [data-testid="stDataFrame"] {
+        background: #0D0D0D !important;
+        color: #D8D8D8 !important;
+        border: 1px solid #CC4400 !important;
+        border-radius: 8px !important;
+        overflow: hidden;
+        box-shadow: 0 0 16px rgba(204,68,0,0.1) !important;
     }
-    /* Push main content away from left edge so logo doesn't overlap */
-    .logo-corner {
-        position: fixed;
-        top: 8px;
-        left: 10px;
-        z-index: 9999;
+    [data-testid="stDataFrame"] thead th {
+        background: #CC4400 !important;
+        color: white !important;
+        font-weight: 700 !important;
+        font-size: 0.78rem !important;
+        letter-spacing: 0.5px !important;
+        text-transform: uppercase !important;
+    }
+    [data-testid="stDataFrame"] tbody tr:nth-child(even) td {
+        background: #131313 !important;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    .footer-credit {
         text-align: center;
+        color: #333333;
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+        margin-top: 36px;
+        padding-top: 14px;
+        border-top: 1px solid #181818;
     }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("""
-<div class="logo-corner">
-    <img src="data:image/png;base64,{logo_b64}" width="160" style="display:block; margin:0 auto;"/>
-    <p style="font-size:14px; color:gray; margin-top:6px;">Made by Michael Ginsberg</p>
+_logo_b64 = __import__('base64').b64encode(open("TPM_Logo.png", "rb").read()).decode()
+st.markdown(f"""
+<div class="hero-wrap">
+    <img src="data:image/png;base64,{_logo_b64}" width="72"/>
+    <div>
+        <p class="hero-title">Ledger Reconciliation</p>
+        <p class="hero-tag">Texas Precious Metals</p>
+    </div>
 </div>
-""".replace("{logo_b64}", __import__('base64').b64encode(open("TPM_Logo.png", "rb").read()).decode()), unsafe_allow_html=True)
-
-st.title("Ledger Reconciliation")
+""", unsafe_allow_html=True)
 
 tab_silver, tab_gold = st.tabs(["Silver", "Gold"])
 
@@ -227,3 +383,5 @@ with tab_gold:
             st.error(f"Error during processing: {e}")
     elif gold_ledger_file or gold_credit_file:
         st.info("Upload both files to run the reconciliation.")
+
+st.markdown('<div class="footer-credit">Made by Michael Ginsberg</div>', unsafe_allow_html=True)
